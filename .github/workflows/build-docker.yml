@@ -1,0 +1,26 @@
+# This is a basic workflow to help you get started with Actions
+
+name: sillytavern-extras
+
+# Controls when the workflow will run
+on:
+    
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: [self-hosted, linux, X64]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Deploy
+        run: |
+          tagname=gchr.io/chrisbennight/sillytavern-extras:$(date +%Y%m%d.%H%M%S)
+          sudo docker build .  --file docker/Dockerfile  -t $tagname --build-arg REQUIREMENTS=requirements.txt --build-arg MODULES=caption,chromadb,classify,embeddings,summarize 
+          sudo docker login ghcr.io --username chrisbennight --password-stdin < ~/.github-docker-token
+          sudo docker push $tagname
