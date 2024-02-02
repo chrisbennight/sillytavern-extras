@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run Deploy
         run: |
-          tagname=gchr.io/chrisbennight/sillytavern-extras:$(date +%Y%m%d.%H%M%S)
+          tagname=ghcr.io/chrisbennight/sillytavern-extras:$(date +%Y%m%d.%H%M%S)
           sudo docker build .  --file docker/Dockerfile  -t $tagname --build-arg REQUIREMENTS=requirements.txt --build-arg MODULES=caption,chromadb,classify,embeddings,summarize 
           sudo docker login ghcr.io --username chrisbennight --password-stdin < ~/.github-docker-token
           sudo docker push $tagname
